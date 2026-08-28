@@ -1,0 +1,9 @@
+{
+  "slug": "live-figure-deck",
+  "title": "Live Figure Deck",
+  "artifact_class": "static-web",
+  "user": "Scientists and educators who need a few formula-driven, animated explanatory figures in a talk without adopting a full animation pipeline.",
+  "smallest_useful_product": "A static web editor with formula labels, a 2D plot, parameter sliders, named animation intervals, and export to a self-contained HTML slide or MP4-ready frame sequence.",
+  "monetization": "one-time",
+  "constraints": "Math rendering must work offline; label animation intervals precisely; export must be deterministic; do not imply mathematical correctness beyond user-entered equations."
+}
