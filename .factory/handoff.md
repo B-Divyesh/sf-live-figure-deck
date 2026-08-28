@@ -39,12 +39,13 @@ App; `public/staticwebapp.config.json` is copied into the build.
 
 ## Verification completed
 
-- `npm test`: 5 Vitest unit tests plus 9 passing Playwright scenarios across
+- `npm test`: 5 Vitest unit tests plus 11 passing Playwright scenarios across
   desktop Chromium and a 390 px mobile viewport (1 intentional desktop skip
   for the mobile-only width assertion).
 - Playwright covers first-run onboarding, equation errors, interval creation,
   playback, HTML download, returned-license verification, URL token removal,
-  no console errors, mobile overflow, and axe serious/critical checks.
+  no console errors, cached offline reload, mobile overflow, and axe
+  serious/critical checks.
 - Axe: 0 serious or critical violations on desktop and mobile editor states.
 - `npm run build`: passes TypeScript strict checking and Vite production build.
 - `npm audit --omit=dev`: 0 vulnerabilities. Full install audit also reports 0.

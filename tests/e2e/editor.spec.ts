@@ -57,6 +57,16 @@ test('restores a returned Studio license without exposing it in the URL', async 
   await expect(page.locator('#license-message')).toContainText('active');
 });
 
+test('reloads the editor from its offline shell', async ({ page, context }) => {
+  await page.getByRole('button', { name: 'Open example' }).click();
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await context.setOffline(true);
+  await page.reload({ waitUntil: 'load' });
+  await expect(page.locator('main')).toBeVisible();
+  await expect(page.locator('#offline-banner')).toBeVisible();
+});
+
 test('fits the editor at 390 CSS pixels without horizontal overflow', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'mobile project only');
   await page.getByRole('button', { name: 'Open example' }).click();

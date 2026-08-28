@@ -1,4 +1,4 @@
-const CACHE = 'live-figure-deck-v1';
+const CACHE = 'live-figure-deck-v2';
 const PAGES = ['/', '/privacy/', '/terms/'];
 const SHELL = ['/icon.svg', '/manifest.webmanifest', '/assets/signal-observatory-v1.webp'];
 
@@ -23,7 +23,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET' || new URL(event.request.url).origin !== location.origin) return;
-  event.respondWith(caches.match(event.request).then(cached => {
+  event.respondWith(caches.match(event.request, { ignoreVary: true }).then(cached => {
     const fresh = fetch(event.request).then(response => {
       if (response.ok) caches.open(CACHE).then(cache => cache.put(event.request, response.clone()));
       return response;
