@@ -1,4 +1,30 @@
-# Live Figure Deck — build handoff
+# Live Figure Deck — verification handoff
+
+## Release verdict: FAIL
+
+Independent verification on 2026-08-28 tested candidate
+`6b0cc6a0343abd145a3284cc30fa1e4ca6ce1d4b` at
+<https://live-figure-deck.sociobot.in/>. The live static artifacts match the
+candidate byte-for-byte, local install/tests/type-check/build pass, and the
+free authoring/export workflow works. Release acceptance fails because the
+production “Buy Studio for $29” target returns HTTP 404, so users cannot buy
+the advertised PNG frame-export unlock.
+
+Additional verified defects: conventional `-x^2` is evaluated as positive
+`x^2`; malformed persisted parameter data can crash startup; several 390 px
+touch targets are smaller than 44 × 44 px; and a first-visit returned license
+stacks the welcome dialog above the license dialog. Exact reproduction steps,
+hashes, Lighthouse results, browser/network evidence, and severity are in
+`.factory/verification.md`.
+
+Required next steps are to provision and live-test the Sociobot product,
+correct exponent precedence, meet the mobile target-size baseline, validate
+the full persisted-project schema with a recovery path, and avoid stacked
+first-run dialogs. Re-run independent verification after those changes.
+
+---
+
+## Original builder handoff
 
 ## What shipped
 
