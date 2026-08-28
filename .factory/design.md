@@ -103,6 +103,5 @@ mockup, no illegible pseudo-interface.
 
 Generated with the factory Azure OpenAI image deployment (`factory-image`) on
 2026-08-28. The output is original to this product. The exact derived prompt is
-stored in `assets/src/signal-observatory.json`. Shipping derivatives are WebP
-and AVIF, each kept below 300 KB.
-
+stored in `assets/src/signal-observatory.json`. The 768 × 512 shipping WebP is
+42 KB, comfortably below the 300 KB image budget.
