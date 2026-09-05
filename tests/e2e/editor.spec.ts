@@ -227,7 +227,7 @@ test('recovers safely from malformed saved data', async ({ page }, testInfo) => 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A wave gathers amplitude');
 });
 
-test('reports invalid formulas and oversized frame packs with a recovery step', async ({ page }, testInfo) => {
+test('@claim:frame-pack-limit reports invalid formulas and oversized frame packs with a recovery step', async ({ page }, testInfo) => {
   test.skip(isMobileProject(testInfo.project.name), 'error recovery runs once in desktop Chromium');
   await openCleanDemo(page);
   const formula = page.getByLabel(/Equation/);

@@ -119,7 +119,7 @@ app.innerHTML = `
     <p class="modal-lede">HTML keeps playback controls. PNG gives one image for each frame.</p>
     <div class="export-options">
       <article><span class="format-mark">.HTML</span><h3>Interactive slide</h3><p>One self-contained offline file with playback and keyboard controls.</p><button class="button primary" id="html-export" type="button">Download HTML</button><small>Included free</small></article>
-      <article><span class="format-mark">.ZIP</span><h3>PNG frame pack</h3><p>1280 × 720 numbered frames, manifest, and ready-to-run FFmpeg command.</p><button class="button ghost" id="frames-export" type="button">Export PNG frames</button><small>Included free</small><progress id="export-progress" max="1" value="0" hidden></progress>
+      <article><span class="format-mark">.ZIP</span><h3>PNG frame pack</h3><p>1280 × 720 numbered frames, manifest, and ready-to-run FFmpeg command.</p><button class="button ghost" id="frames-export" type="button">Export PNG frames</button><small>Included free · Up to 600 images</small><progress id="export-progress" max="1" value="0" hidden></progress>
       </article>
     </div>
     <p class="export-warning" id="export-warning" role="alert" hidden></p>

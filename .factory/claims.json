@@ -35,6 +35,13 @@
     "sandbox": "fresh /demo sample at 1 second and 1 fps; inspect ZIP entries, PNG dimensions, manifest values, and command"
   },
   {
+    "id": "frame-pack-limit",
+    "claim": "PNG frame packs are limited to 600 images and give a recovery step when the figure exceeds that limit.",
+    "where": "export dialog and frame-export error",
+    "test": "npm test -- --grep @claim:frame-pack-limit",
+    "sandbox": "fresh /demo sample set to 60 seconds at 60 fps; request a frame pack and assert the actionable limit error"
+  },
+  {
     "id": "local-save",
     "claim": "Autosaves the current figure in browser storage while demo edits stay in a separate demo namespace.",
     "where": "demo banner, privacy, README",

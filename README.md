@@ -16,6 +16,7 @@ Try the isolated sample at
 - Plays and steps frames at a configurable 1–60 fps.
 - Exports a deterministic, self-contained interactive HTML slide.
 - Exports numbered 1280 × 720 PNG frames with an FFmpeg manifest.
+- Limits each frame pack to 600 images and explains how to reduce larger jobs.
 - Autosaves the current figure in browser storage.
 - Works offline after one successful visit.
 
