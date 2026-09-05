@@ -1,77 +1,65 @@
-# Live Figure Deck — verification handoff
+# Live Figure Deck — repair handoff
 
-## Review 1 status — 2026-09-05
+## Release status
 
-**Release verdict remains FAIL.** Review report: `.factory/review-1.md`.
-The reviewed live application is still byte-identical to implementation commit
-`6b0cc6a0343abd145a3284cc30fa1e4ca6ce1d4b`; current documentation commit is
-`b1f1cf5ea929d0ef5656c07502ee410982d3267f`. Review 1 reproduced every prior
-finding: unavailable Studio checkout, incorrect `-x^2` precedence, malformed
-saved-project crash, undersized phone targets, and stacked returned-license
-dialogs. It additionally found no isolated `/demo` sandbox, no claims manifest
-or tagged claim tests (14 public claims untested), first-screen plain-language
-and site-structure failures, no designed 404, missing metadata/index files,
-and missing demo/copy-audit/verify records.
+Repair 1 is complete and deployed at
+<https://live-figure-deck.sociobot.in/>.
 
-Verification from a clean checkout: `npm ci`, `npm test`, and `npm run build`
-pass; build creates `dist/`. This is not a product PASS because passing tests
-do not cover the missing required claims and the 11 review findings remain.
+- Implementation and deployed commit: `e348fb0a1f15bcd2b85415a02790d385de67401a`.
+- Documentation commit: the later commit containing this handoff; use
+  `git rev-parse HEAD` in the final checkout.
+- Historical failed review: `.factory/review-1.md`.
+- Repair verification: `.factory/repair-1-verification.md`.
+- Browser and Lighthouse evidence:
+  `/work/.evidence/live-figure-deck-repair-1/`.
 
-Next steps: repair the listed product defects, add required documentation and
-claim evidence, provision checkout, deploy, then conduct a fresh live review.
+## What changed
 
-## Release verdict: FAIL
+- Added a plain-language landing page that states the job, audience, first
+  action, and three facts before scrolling on a 390 px phone.
+- Added `/app` for real work and `/demo` for an immediate populated sample.
+  Demo storage uses `demo:lfd:project:v1`; real storage uses
+  `lfd:project:v1`.
+- Added the persistent demo label, “Reset demo,” and “Start for real.” Leaving
+  the demo removes its key without reading or changing the real key.
+- Corrected exponent precedence. `-x^2` now evaluates as `-(x^2)`, while
+  `(-x)^2`, `2^3^2`, and `2^-2` keep their standard meanings.
+- Added complete saved-project shape checks and a visible recovery action for
+  incomplete or damaged local data.
+- Raised visible phone controls to at least 44 × 44 CSS pixels and retained
+  visible focus, keyboard dialog behavior, and reduced-motion handling.
+- Added route-specific titles and canonical URLs, full social metadata, an
+  Apple touch icon, sitemap, security headers, and a designed 404 response.
+- Added `.factory/claims.json`, `.factory/demo.md`, the landing copy audit, and
+  ten outcome-based claim tests.
+- Added a 600-image browser-memory guard for PNG frame packs with a clear
+  recovery instruction.
+- Removed the unavailable Studio purchase path and made PNG frame export free.
+  The product no longer links to the unprovisioned 404 checkout.
 
-Independent verification on 2026-08-28 tested candidate
-`6b0cc6a0343abd145a3284cc30fa1e4ca6ce1d4b` at
-<https://live-figure-deck.sociobot.in/>. The live static artifacts match the
-candidate byte-for-byte, local install/tests/type-check/build pass, and the
-free authoring/export workflow works. Release acceptance fails because the
-production “Buy Studio for $29” target returns HTTP 404, so users cannot buy
-the advertised PNG frame-export unlock.
+## Review 1 disposition
 
-Additional verified defects: conventional `-x^2` is evaluated as positive
-`x^2`; malformed persisted parameter data can crash startup; several 390 px
-touch targets are smaller than 44 × 44 px; and a first-visit returned license
-stacks the welcome dialog above the license dialog. Exact reproduction steps,
-hashes, Lighthouse results, browser/network evidence, and severity are in
-`.factory/verification.md`.
+| Finding | Disposition |
+| --- | --- |
+| Studio checkout returned 404 | Closed in the product: the dead offer and paywall were removed; both exports are free. Billing registration remains an external dependency before paid access can return. |
+| No isolated demo | Fixed with `/demo`, a separate `demo:` key, persistent label, reset, and clean exit. |
+| No claims evidence | Fixed with ten declared claims and one tagged observable test for each. |
+| Wrong `-x^2` precedence | Fixed in the parser and both editor/export paths; unit and browser outcomes cover it. |
+| Malformed saved data crashed startup | Fixed with full shape validation and an in-product replacement action. |
+| Phone targets below 44 px | Fixed and measured across every visible link, button, input, select, and summary in the demo. |
+| Stacked license dialogs | Fixed by removing the unavailable license flow; legacy return tokens are stripped and only onboarding opens. |
+| Unclear first screen | Replaced with a job-first landing page and required section order. |
+| Demo and unknown routes were not real | `/demo` has its own state/title; `/404` and arbitrary missing routes return HTTP 404 with a designed page. |
+| Metadata and index files missing | Added canonical, Open Graph, Twitter, touch icon, sitemap, and response-header `frame-ancestors`. |
+| Review documents missing | Added the demo guide, claims manifest, copy audit, catalog description, and this verification record. |
 
-Required next steps are to provision and live-test the Sociobot product,
-correct exponent precedence, meet the mobile target-size baseline, validate
-the full persisted-project schema with a recovery path, and avoid stacked
-first-run dialogs. Re-run independent verification after those changes.
+The 14 previously untested statements are either covered by the ten combined
+claim tests or removed. The removed statement was the once-daily Studio license
+check because the unavailable paid flow is no longer presented.
 
----
+## Clean verification
 
-## Original builder handoff
-
-## What shipped
-
-- A complete local-first, responsive figure editor in Vite + vanilla TypeScript.
-- Safe numeric expression parsing for `x`, parameters `a`/`b`/`c`, constants,
-  powers, and common functions. User expressions are not passed to `eval` in
-  the editor.
-- Immediate canvas plotting with editable bounds, live sliders, an accessible
-  text alternative, formula errors, and a useful no-finite-values state.
-- Precise, named parameter intervals with start/end time and value,
-  linear/smooth/hold easing, overlap rejection per parameter, timeline blocks,
-  deterministic frame stepping, and keyboard controls.
-- Pausable playback and a distraction-free presentation mode.
-- Free self-contained interactive HTML export with playback, scrubbing, and
-  keyboard controls and no runtime server or third-party asset.
-- Studio PNG frame-pack export: numbered 1280 × 720 frames, a JSON manifest,
-  and an FFmpeg command in an uncompressed ZIP generated entirely in-browser.
-- $29 one-time Studio checkout link, returned-license capture, local token
-  storage, optimistic cached unlock, once-daily Sociobot verification, revoked
-  license handling, restore-by-token, and remove-license controls.
-- Local autosave, first-run sample/blank onboarding, offline status, service
-  worker shell caching, privacy and terms pages, and no analytics or CDN calls.
-- A product-specific pixel/demoscene “signal console” system plus an original
-  generated observatory illustration. The shipping WebP is 41,954 bytes;
-  prompt and provenance are in `.factory/design.md` and `assets/src/`.
-
-## Run and deploy
+Run from the repository root with Node.js 20 or newer:
 
 ```sh
 npm ci
@@ -79,43 +67,50 @@ npm test
 npm run build
 ```
 
-The exact production command is `npm run build`. Output lands in `dist/`, with
-`dist/index.html` at the deploy root. Deploy the contents as an Azure Static Web
-App; `public/staticwebapp.config.json` is copied into the build.
+Results on 5 September 2026:
 
-## Verification completed
+- `npm ci`: pass; 61 packages installed; 0 audit vulnerabilities.
+- `npm test`: pass; 6 unit tests, 18 browser tests passed, and 16 intentional
+  project-specific skips.
+- Every command in `.factory/claims.json`: pass from the clean install.
+- `npm run build`: pass; `dist/index.html` exists.
+- `npm audit` and `npm audit --omit=dev`: pass with 0 vulnerabilities.
+- Playwright axe scan: 0 violations on `/`, `/demo`, `/privacy/`, `/terms/`,
+  and the 404 page.
+- Worker URL verifier: pass on live `/` and `/demo`; no console or page errors.
+- Live fresh Chromium: desktop 1440 × 1000 and phone 390 × 844 pass. The first
+  action is visible before scrolling, the sample is populated, and no
+  horizontal overflow occurs.
+- Live sample flow: formula precedence, HTML download, PNG ZIP download,
+  isolated reset, and offline reload pass.
+- Live routes: `/`, `/app`, `/demo`, `/privacy/`, and `/terms/` return 200;
+  `/404` and an arbitrary missing route return the designed page with 404.
+- Live security headers include CSP `frame-ancestors 'none'`, HSTS, nosniff,
+  a strict-origin referrer policy, and camera/microphone/geolocation denial.
+- Live `index.html` and `sw.js` SHA-256 hashes match the deployed local build.
 
-- `npm test`: 5 Vitest unit tests plus 11 passing Playwright scenarios across
-  desktop Chromium and a 390 px mobile viewport (1 intentional desktop skip
-  for the mobile-only width assertion).
-- Playwright covers first-run onboarding, equation errors, interval creation,
-  playback, HTML download, returned-license verification, URL token removal,
-  no console errors, cached offline reload, mobile overflow, and axe
-  serious/critical checks.
-- Axe: 0 serious or critical violations on desktop and mobile editor states.
-- `npm run build`: passes TypeScript strict checking and Vite production build.
-- `npm audit --omit=dev`: 0 vulnerabilities. Full install audit also reports 0.
-- Lighthouse 12.8.2, mobile defaults against the production preview:
-  Performance **100**, Accessibility **100**, Best Practices **100**, SEO
-  **100**; FCP 0.9 s, LCP 1.5 s, CLS 0, total blocking time 70 ms.
-- Production budgets (uncompressed): initial JS 39.9 KB, main CSS 18.8 KB,
-  fonts 0 KB, hero WebP 42.0 KB. All are well below the required ceilings.
-- Visual inspection completed at 1440 × 1000 and 390 × 844. The phone layout
-  intentionally puts the stage first, then source controls and interval map.
-- `prefers-reduced-motion` removes UI transition duration; authored motion is
-  user-started and always pausable.
+## Performance
 
-## Known gaps and next steps
+Lighthouse 12.8.2 mobile results against production:
 
-- The tool intentionally provides numerical expression evaluation rather than
-  a CAS or mathematical correctness checking. Display labels use offline
-  system math characters/Unicode, not a full LaTeX dialect.
-- PNG frame export is in-memory because this is a static application. Very long
-  high-frame-rate decks can consume substantial memory; v1 is optimized for the
-  brief’s short explanatory figures. HTML export remains lightweight.
-- The factory still needs to register the production billing product/return URL
-  and exercise a live purchase. No product ID or payment-provider secret is
-  embedded in this repository.
-- Browser-provided MP4 encoding is inconsistent, so v1 honestly supplies an
-  MP4-ready PNG sequence and exact FFmpeg command instead of claiming native
-  MP4 output.
+| Route | Performance | Accessibility | Best practices | SEO | FCP | LCP | TBT | CLS |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `/` | 100 | 100 | 100 | 100 | 0.8 s | 0.8 s | 0 ms | 0 |
+| `/demo` | 100 | 100 | 100 | 100 | 0.9 s | 1.3 s | 40 ms | 0 |
+
+The production build emits 45.5 KB of uncompressed application JavaScript in
+two route-loaded files and 22.7 KB of main CSS. It uses no downloaded fonts.
+The generated source artwork is 42.0 KB; the social image is 78.2 KB and is not
+loaded into the first screen.
+
+## Known limits and next steps
+
+- Direct MP4 encoding remains outside this browser-only product. The PNG pack
+  includes an FFmpeg command, matching the brief’s MP4-ready requirement.
+- The evaluator is numerical, not a computer algebra system or correctness
+  checker.
+- Frame packs are limited to 600 images to prevent unbounded browser memory
+  use. Lower the duration or frame rate for a larger request, or use HTML.
+- One-time billing is not provisioned for this slug. Both exports remain free
+  until the factory registers and verifies the Sociobot billing product. Do not
+  restore paid copy or a checkout link before that external dependency works.
