@@ -79,6 +79,7 @@ function canvasBlob(canvas: HTMLCanvasElement): Promise<Blob> {
 
 export async function exportFramePack(project: FigureProject, progress: (done: number, total: number) => void): Promise<void> {
   const total = Math.round(project.duration * project.fps) + 1;
+  if (total > 600) throw new Error(`This frame pack would contain ${total} images. Lower the duration or frame rate to export 600 images or fewer.`);
   const canvas = document.createElement('canvas'); canvas.width = 1280; canvas.height = 720;
   const context = canvas.getContext('2d'); if (!context) throw new Error('Canvas export is not available in this browser.');
   const files: { name: string; data: Uint8Array }[] = [];

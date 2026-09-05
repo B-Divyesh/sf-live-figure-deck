@@ -90,7 +90,12 @@ test('@claim:frame-playback clamps 1–60 fps and steps exact frames', async ({ 
   await fps.fill('0'); await fps.press('Tab'); await expect(fps).toHaveValue('1');
   await fps.fill('61'); await fps.press('Tab'); await expect(fps).toHaveValue('60');
   await fps.fill('30'); await fps.press('Tab');
-  await page.locator('body').press('ArrowRight');
+  const duration = page.getByLabel('Duration');
+  await duration.fill('0'); await duration.press('Tab'); await expect(duration).toHaveValue('1');
+  await duration.fill('61'); await duration.press('Tab'); await expect(duration).toHaveValue('60');
+  await duration.fill('6'); await duration.press('Tab');
+  await page.locator('.formula-display').click();
+  await page.keyboard.press('ArrowRight');
   await expect(page.locator('#time-output')).toHaveText('0.03 / 6.00 s');
   await page.locator('body').press('Space');
   await expect(page.getByRole('button', { name: 'Pause animation' })).toBeVisible();
@@ -220,6 +225,26 @@ test('recovers safely from malformed saved data', async ({ page }, testInfo) => 
   await expect(page.locator('dialog[open]')).toHaveCount(0);
   await page.getByRole('button', { name: 'Replace with sample' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A wave gathers amplitude');
+});
+
+test('reports invalid formulas and oversized frame packs with a recovery step', async ({ page }, testInfo) => {
+  test.skip(isMobileProject(testInfo.project.name), 'error recovery runs once in desktop Chromium');
+  await openCleanDemo(page);
+  const formula = page.getByLabel(/Equation/);
+  await formula.fill('mystery(x)');
+  await expect(page.locator('#formula-error')).toContainText('Unknown function');
+  await formula.fill('a * x + c');
+  await expect(formula).toHaveAttribute('aria-invalid', 'false');
+  await page.evaluate(() => {
+    const value = JSON.parse(localStorage.getItem('demo:lfd:project:v1') ?? '{}');
+    value.duration = 60; value.fps = 60; value.intervals = [];
+    localStorage.setItem('demo:lfd:project:v1', JSON.stringify(value));
+  });
+  await page.reload();
+  await page.getByRole('button', { name: 'Export' }).click();
+  await page.getByRole('button', { name: 'Export PNG frames' }).click();
+  await expect(page.locator('#export-warning')).toContainText('Lower the duration or frame rate');
+  await expect(page.getByRole('button', { name: 'Export PNG frames' })).toBeEnabled();
 });
 
 test('uses one modal after a legacy license return and removes the token from the URL', async ({ page }, testInfo) => {
