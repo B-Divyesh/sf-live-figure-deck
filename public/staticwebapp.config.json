@@ -1,5 +1,6 @@
 {
   "routes": [
+    { "route": "/404", "statusCode": 404 },
     { "route": "/app", "rewrite": "/index.html" },
     { "route": "/demo", "rewrite": "/index.html" },
     { "route": "/assets/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
