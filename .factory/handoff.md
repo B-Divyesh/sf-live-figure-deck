@@ -1,17 +1,26 @@
-# Live Figure Deck — repair handoff
+# Live Figure Deck — verification 3 handoff
 
 ## Release status
 
-Repair 1 is complete and deployed at
+Independent verification 3 passed the deployed product at
 <https://live-figure-deck.sociobot.in/>.
 
-- Implementation and deployed commit: `e348fb0a1f15bcd2b85415a02790d385de67401a`.
-- Documentation commit: the later commit containing this handoff; use
-  `git rev-parse HEAD` in the final checkout.
+- Verdict: **PASS** — 0 findings and 0 untested claims.
+- Implementation and deployed commit:
+  `e348fb0a1f15bcd2b85415a02790d385de67401a`.
+- Documentation baseline before this report:
+  `0462735d72622df508d49ad525f24de2f10c6126`.
+- Current report: `.factory/verification-3.md`.
 - Historical failed review: `.factory/review-1.md`.
 - Repair verification: `.factory/repair-1-verification.md`.
-- Browser and Lighthouse evidence:
-  `/work/.evidence/live-figure-deck-repair-1/`.
+- Current browser and Lighthouse evidence:
+  `/work/.evidence/live-figure-deck-verify-3/`.
+
+Verification 3 reran every declared claim command from a clean checkout, the
+full unit/browser suite, build, audits, fresh desktop and phone flows, Axe,
+the factory URL verifier, offline/update checks, both exports, legal routes,
+intentional 404s, and Lighthouse. A clean build of the exact implementation
+candidate matched all 20 checked production artifacts byte-for-byte.
 
 ## What changed
 
@@ -75,8 +84,8 @@ Results on 5 September 2026:
 - Every command in `.factory/claims.json`: pass from the clean install.
 - `npm run build`: pass; `dist/index.html` exists.
 - `npm audit` and `npm audit --omit=dev`: pass with 0 vulnerabilities.
-- Playwright axe scan: 0 violations on `/`, `/demo`, `/privacy/`, `/terms/`,
-  and the 404 page.
+- Playwright axe scan: 0 violations on `/`, `/app`, `/demo`, `/privacy/`,
+  `/terms/`, and both tested 404 routes.
 - Worker URL verifier: pass on live `/` and `/demo`; no console or page errors.
 - Live fresh Chromium: desktop 1440 × 1000 and phone 390 × 844 pass. The first
   action is visible before scrolling, the sample is populated, and no
@@ -87,7 +96,7 @@ Results on 5 September 2026:
   `/404` and an arbitrary missing route return the designed page with 404.
 - Live security headers include CSP `frame-ancestors 'none'`, HSTS, nosniff,
   a strict-origin referrer policy, and camera/microphone/geolocation denial.
-- Live `index.html` and `sw.js` SHA-256 hashes match the deployed local build.
+- All 20 checked served files match the exact candidate build byte-for-byte.
 
 ## Performance
 
@@ -95,8 +104,8 @@ Lighthouse 12.8.2 mobile results against production:
 
 | Route | Performance | Accessibility | Best practices | SEO | FCP | LCP | TBT | CLS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `/` | 100 | 100 | 100 | 100 | 0.8 s | 0.8 s | 0 ms | 0 |
-| `/demo` | 100 | 100 | 100 | 100 | 0.9 s | 1.3 s | 40 ms | 0 |
+| `/` | 100 | 100 | 100 | 100 | 0.8 s | 0.9 s | 10 ms | 0 |
+| `/demo` | 100 | 100 | 100 | 100 | 0.9 s | 1.2 s | 40 ms | 0 |
 
 The production build emits 45.5 KB of uncompressed application JavaScript in
 two route-loaded files and 22.7 KB of main CSS. It uses no downloaded fonts.
