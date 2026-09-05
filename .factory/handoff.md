@@ -1,5 +1,25 @@
 # Live Figure Deck — verification handoff
 
+## Review 1 status — 2026-09-05
+
+**Release verdict remains FAIL.** Review report: `.factory/review-1.md`.
+The reviewed live application is still byte-identical to implementation commit
+`6b0cc6a0343abd145a3284cc30fa1e4ca6ce1d4b`; current documentation commit is
+`b1f1cf5ea929d0ef5656c07502ee410982d3267f`. Review 1 reproduced every prior
+finding: unavailable Studio checkout, incorrect `-x^2` precedence, malformed
+saved-project crash, undersized phone targets, and stacked returned-license
+dialogs. It additionally found no isolated `/demo` sandbox, no claims manifest
+or tagged claim tests (14 public claims untested), first-screen plain-language
+and site-structure failures, no designed 404, missing metadata/index files,
+and missing demo/copy-audit/verify records.
+
+Verification from a clean checkout: `npm ci`, `npm test`, and `npm run build`
+pass; build creates `dist/`. This is not a product PASS because passing tests
+do not cover the missing required claims and the 11 review findings remain.
+
+Next steps: repair the listed product defects, add required documentation and
+claim evidence, provision checkout, deploy, then conduct a fresh live review.
+
 ## Release verdict: FAIL
 
 Independent verification on 2026-08-28 tested candidate
