@@ -1,6 +1,6 @@
-const CACHE = 'live-figure-deck-v2';
-const PAGES = ['/', '/privacy/', '/terms/'];
-const SHELL = ['/icon.svg', '/manifest.webmanifest', '/assets/signal-observatory-v1.webp'];
+const CACHE = 'live-figure-deck-v4';
+const PAGES = ['/', '/app', '/demo', '/privacy/', '/terms/'];
+const SHELL = ['/404.html', '/icon.svg', '/apple-touch-icon.png', '/manifest.webmanifest', '/assets/signal-observatory-v1.webp'];
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
@@ -23,11 +23,18 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET' || new URL(event.request.url).origin !== location.origin) return;
-  event.respondWith(caches.match(event.request, { ignoreVary: true }).then(cached => {
-    const fresh = fetch(event.request).then(response => {
-      if (response.ok) caches.open(CACHE).then(cache => cache.put(event.request, response.clone()));
+  event.respondWith((async () => {
+    const cached = await caches.match(event.request, { ignoreVary: true });
+    if (cached) return cached;
+    try {
+      const response = await fetch(event.request);
+      if (response.ok) {
+        const cache = await caches.open(CACHE);
+        await cache.put(event.request, response.clone());
+      }
       return response;
-    }).catch(() => cached || new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } }));
-    return cached || fresh;
-  }));
+    } catch {
+      return new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+    }
+  })());
 });

@@ -105,3 +105,9 @@ Generated with the factory Azure OpenAI image deployment (`factory-image`) on
 2026-08-28. The output is original to this product. The exact derived prompt is
 stored in `assets/src/signal-observatory.json`. The 768 × 512 shipping WebP is
 42 KB, comfortably below the 300 KB image budget.
+
+The 1200 × 630 social image in
+`public/assets/live-figure-deck-social.webp` is a center crop of that original
+generated image. The 180 × 180 Apple touch icon is a hand-drawn raster version
+of the repository’s original SVG plot mark. Both derivatives were made on
+2026-09-05 and contain no third-party artwork, text, logos, or trademarks.

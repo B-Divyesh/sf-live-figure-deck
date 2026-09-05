@@ -1,0 +1,65 @@
+[
+  {
+    "id": "expression-evaluation",
+    "claim": "Evaluates numeric formulas using x, a, b, c, supported functions, constants, and standard exponent precedence.",
+    "where": "editor equation help, README",
+    "test": "npm test -- --grep @claim:expression-evaluation",
+    "sandbox": "fresh browser context at /demo; evaluate -x^2 over x=1..2 and a supported function expression"
+  },
+  {
+    "id": "interval-timing",
+    "claim": "Uses named intervals with exact start and end times, keeps end values, and rejects overlap on one parameter.",
+    "where": "landing how-it-works, editor timeline, README",
+    "test": "npm test -- --grep @claim:interval-timing",
+    "sandbox": "fresh /demo sample; inspect seeded timings, reject an overlapping a interval, then accept it on b"
+  },
+  {
+    "id": "frame-playback",
+    "claim": "Plays and frame-steps at a configurable 1–60 fps.",
+    "where": "editor controls, README",
+    "test": "npm test -- --grep @claim:frame-playback",
+    "sandbox": "fresh /demo sample; exercise both frame-rate boundaries, one-frame keyboard step, play, and pause"
+  },
+  {
+    "id": "html-export",
+    "claim": "The free editor exports a deterministic, self-contained interactive HTML slide that runs without a server.",
+    "where": "landing, export dialog, README, terms",
+    "test": "npm test -- --grep @claim:html-export",
+    "sandbox": "fresh /demo sample; compare two downloads byte-for-byte, go offline, open the markup, step, and play"
+  },
+  {
+    "id": "png-export",
+    "claim": "The free editor exports numbered 1280 × 720 PNG frames with a frame manifest and FFmpeg command.",
+    "where": "landing, export dialog, README",
+    "test": "npm test -- --grep @claim:png-export",
+    "sandbox": "fresh /demo sample at 1 second and 1 fps; inspect ZIP entries, PNG dimensions, manifest values, and command"
+  },
+  {
+    "id": "local-save",
+    "claim": "Autosaves the current figure in browser storage while demo edits stay in a separate demo namespace.",
+    "where": "demo banner, privacy, README",
+    "test": "npm test -- --grep @claim:local-save",
+    "sandbox": "seed a real-data sentinel, edit and reset /demo, leave demo, and prove the real key never changes"
+  },
+  {
+    "id": "local-privacy",
+    "claim": "Does not upload project data or set cookies, analytics, or advertising scripts.",
+    "where": "landing, privacy, README",
+    "test": "npm test -- --grep @claim:local-privacy",
+    "sandbox": "record every request while editing and exporting /demo; assert same-origin requests only, no cookies, and no third-party scripts"
+  },
+  {
+    "id": "no-account",
+    "claim": "No account is needed to open, edit, play, or export the sample.",
+    "where": "landing facts, README",
+    "test": "npm test -- --grep @claim:no-account",
+    "sandbox": "fresh /demo context with no storage; assert populated controls and playback are available without a prompt"
+  },
+  {
+    "id": "offline-editor",
+    "claim": "The editor works offline after one successful visit.",
+    "where": "offline banner, README, terms",
+    "test": "npm test -- --grep @claim:offline-editor",
+    "sandbox": "dedicated fresh browser context; load /demo online, obtain service-worker control, go offline, and reload"
+  }
+]

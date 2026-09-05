@@ -1,67 +1,86 @@
 # Live Figure Deck
 
-Live Figure Deck is a local-first editor for scientists and educators who need
-one formula-driven animated figure in a talk without adopting a full animation
-pipeline. Author an equation, tune three parameters, schedule named animation
-intervals, and export a self-contained interactive HTML slide. A one-time
-Studio license also unlocks deterministic 1280 × 720 PNG frame packs.
+Live Figure Deck helps scientists and educators build one formula-driven,
+animated figure for a talk. Enter a numeric formula, tune three parameters,
+schedule named intervals, and export the result.
 
-Live site: <https://live-figure-deck.sociobot.in>
+Try the isolated sample at
+<https://live-figure-deck.sociobot.in/demo>. The normal editor is at
+<https://live-figure-deck.sociobot.in/app>.
 
 ## What it does
 
-- Safely evaluates numeric expressions using `x`, `a`, `b`, and `c`, common
-  trigonometric/numeric functions, and constants `pi` and `e`.
-- Animates parameter values across precise, named intervals with linear,
-  smooth, or hold easing. Intervals on the same parameter cannot overlap.
-- Plays and frame-steps the result at a configurable 1–60 fps.
-- Exports an offline, self-contained HTML slide with no runtime server.
-- Exports a ZIP of numbered PNG frames plus an FFmpeg manifest with Studio.
-- Autosaves the current figure to browser local storage; equations are never
-  uploaded.
+- Evaluates numeric expressions using `x`, `a`, `b`, and `c`, common functions,
+  and the constants `pi` and `e`.
+- Animates values across named intervals and rejects overlap on one parameter.
+- Plays and steps frames at a configurable 1–60 fps.
+- Exports a deterministic, self-contained interactive HTML slide.
+- Exports numbered 1280 × 720 PNG frames with an FFmpeg manifest.
+- Autosaves the current figure in browser storage.
+- Works offline after one successful visit.
+
+Both export formats are free. No account is needed. The editor does not upload
+project data or load analytics and advertising scripts.
 
 This is a numerical communication tool, not a computer algebra system. It does
-not prove or validate the mathematical claims entered by the user.
+not verify the meaning or correctness of an equation.
 
-## Develop and verify
+## Clean setup and verification
 
-Requires Node.js 20 or newer. Playwright 1.58.2 is pinned for browser tests.
+Use Node.js 20 or newer. Playwright 1.58.2 is pinned in `package.json`.
 
 ```sh
 npm ci
-npm run dev
 npm test
 npm run build
 ```
 
-`npm test` runs Vitest unit coverage for expression/interval semantics and
-Playwright tests for desktop, 390 px mobile, accessibility, keyboard/playback,
-export, and license return. The production command is exactly `npm run build`;
-the static site is emitted to `dist/` with `dist/index.html` at its root.
+`npm test` runs unit and browser checks. The browser suite covers every entry
+in `.factory/claims.json`, desktop, a 390 px phone viewport, keyboard use,
+accessibility, recovery, routing, offline reload, and both downloads.
 
-To inspect a production build locally:
+Run one declared claim with its exact manifest command:
+
+```sh
+npm test -- --grep @claim:html-export
+```
+
+For local development:
+
+```sh
+npm run dev
+```
+
+For a production preview:
 
 ```sh
 npm run build
 npm run preview
 ```
 
-## Privacy, billing, and offline behavior
+The build output is `dist/`, with `dist/index.html` at its root.
 
-Project data and the optional license token use local storage. License status is
-checked against the Sociobot billing API at most once per day and never blocks
-the free editor at first paint. Checkout is hosted by Sociobot/Dodo; this app
-does not handle card data. A service worker caches the editor shell after the
-first successful visit.
+## Demo and storage
+
+`/demo` starts with a six-second wave figure and two named intervals. Its edits
+use `demo:lfd:project:v1`. Resetting or leaving the demo removes that key and
+does not read or change the normal `lfd:project:v1` key.
+
+See `.factory/demo.md` for the exact sample and reset behavior. See
+`.factory/claims.json` for public claims and their commands.
+
+## Privacy and project notes
 
 See [privacy](https://live-figure-deck.sociobot.in/privacy/) and
-[terms](https://live-figure-deck.sociobot.in/terms/).
+[terms](https://live-figure-deck.sociobot.in/terms/). The researched scope is
+in `.factory/brief.json`. The visual system and original-image provenance are
+in `.factory/design.md`.
 
-## Design and project notes
+## Deployment
 
-The researched scope is in `.factory/brief.json`; the product-specific signal
-console system and generated-image provenance are in `.factory/design.md`.
-Factory handoff and verification results are in `.factory/handoff.md`.
+Build with `npm run build`, then deploy `dist/` as the Azure Static Web App for
+this product. The repository includes route, security-header, cache, 404,
+robots, and sitemap configuration.
 
 ## License
 

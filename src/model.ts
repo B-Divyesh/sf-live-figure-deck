@@ -139,20 +139,20 @@ class Parser {
     return left;
   }
   private term(): Node {
-    let left = this.power();
+    let left = this.unary();
     while (['*', '/'].includes(this.current().value)) {
       const operator = this.take().value;
-      const right = this.power();
+      const right = this.unary();
       const prior = left;
       left = { evaluate: operator === '*' ? vars => prior.evaluate(vars) * right.evaluate(vars) : vars => prior.evaluate(vars) / right.evaluate(vars), source: `(${prior.source}${operator}${right.source})` };
     }
     return left;
   }
   private power(): Node {
-    let left = this.unary();
+    let left = this.primary();
     if (this.current().value === '^') {
       this.take('^');
-      const right = this.power();
+      const right = this.unary();
       const prior = left;
       left = { evaluate: vars => Math.pow(prior.evaluate(vars), right.evaluate(vars)), source: `Math.pow(${prior.source},${right.source})` };
     }
@@ -161,7 +161,7 @@ class Parser {
   private unary(): Node {
     if (this.current().value === '+') { this.take('+'); return this.unary(); }
     if (this.current().value === '-') { this.take('-'); const value = this.unary(); return { evaluate: vars => -value.evaluate(vars), source: `(-${value.source})` }; }
-    return this.primary();
+    return this.power();
   }
   private primary(): Node {
     const token = this.current();
@@ -248,9 +248,25 @@ export function validateProject(project: FigureProject): string[] {
 export function safeProject(value: unknown): FigureProject | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Partial<FigureProject>;
-  if (candidate.version !== 1 || !candidate.parameters || !Array.isArray(candidate.intervals)) return null;
+  const finite = (item: unknown): item is number => typeof item === 'number' && Number.isFinite(item);
+  const parameter = (item: unknown): item is Parameter => {
+    if (!item || typeof item !== 'object') return false;
+    const entry = item as Partial<Parameter>;
+    return typeof entry.label === 'string' && finite(entry.value) && finite(entry.min) && finite(entry.max) && finite(entry.step) && entry.min < entry.max && entry.step > 0;
+  };
+  const interval = (item: unknown): item is Interval => {
+    if (!item || typeof item !== 'object') return false;
+    const entry = item as Partial<Interval>;
+    return typeof entry.id === 'string' && entry.id.length > 0 && typeof entry.name === 'string'
+      && ['a', 'b', 'c'].includes(entry.parameter ?? '') && ['linear', 'smooth', 'hold'].includes(entry.easing ?? '')
+      && finite(entry.start) && finite(entry.end) && finite(entry.from) && finite(entry.to);
+  };
+  if (candidate.version !== 1 || typeof candidate.title !== 'string' || typeof candidate.formula !== 'string'
+    || typeof candidate.formulaLabel !== 'string' || !finite(candidate.xMin) || !finite(candidate.xMax)
+    || !finite(candidate.yMin) || !finite(candidate.yMax) || !finite(candidate.duration) || !finite(candidate.fps)
+    || !candidate.parameters || !parameter(candidate.parameters.a) || !parameter(candidate.parameters.b)
+    || !parameter(candidate.parameters.c) || !Array.isArray(candidate.intervals) || !candidate.intervals.every(interval)) return null;
   try {
-    const clone = structuredClone(candidate) as FigureProject;
-    return validateProject(clone).some(error => error.includes('incomplete')) ? null : clone;
+    return structuredClone(candidate) as FigureProject;
   } catch { return null; }
 }
